@@ -10,6 +10,6 @@ import { ApiKey, ApiKeySchema } from './schemas/api-key.schema';
   ],
   providers: [SettingsService],
   controllers: [SettingsController],
-  exports: [SettingsService],
+  exports: [SettingsService, MongooseModule],
 })
 export class SettingsModule {}

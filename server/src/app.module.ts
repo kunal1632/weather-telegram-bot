@@ -8,6 +8,9 @@ import { WeatherService } from './weather/weather.service';
 import { ChatModule } from './chat/chat.module';
 import { TelegramService } from './telegram/telegram.service';
 import { SettingsModule } from './settings/settings.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { AdminService } from './admin/admin.service';
 
 @Module({
   imports: [
@@ -19,8 +22,9 @@ import { SettingsModule } from './settings/settings.module';
     ScheduleModule.forRoot(),
     ChatModule,
     SettingsModule,
-    // WeatherModule,
+    UsersModule,
+    AuthModule,
   ],
-  providers: [TelegramService, WeatherService],
+  providers: [TelegramService, WeatherService, AdminService],
 })
 export class AppModule {}

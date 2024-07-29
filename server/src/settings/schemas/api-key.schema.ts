@@ -1,8 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+export type ApiKeyDocument = ApiKey & Document;
+
 @Schema()
-export class ApiKey extends Document {
+export class ApiKey {
   @Prop({ required: true })
   key: string;
 

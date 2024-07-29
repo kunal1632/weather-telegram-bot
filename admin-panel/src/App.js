@@ -1,17 +1,33 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
+import OpenRoute from "./Components/auth/OpenRoute";
+import PrivateRoute from "./Components/auth/PrivateRoute";
 
 const App = () => {
   return (
-    <Router>
-      <Switch>
-        <Route path="/login" component={Login} />
-        <Route path="/admin" component={Dashboard} />
-        <Route path="/" component={Login} />
-      </Switch>
-    </Router>
+    <div>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <OpenRoute>
+              <Login />
+            </OpenRoute>
+          }
+        />
+
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </div>
   );
 };
 

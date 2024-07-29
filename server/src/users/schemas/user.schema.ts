@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type ChatDocument = Chat & Document;
+export type UserDocument = User & Document;
 
 @Schema()
-export class Chat {
+export class User {
   @Prop({ required: true })
-  chatId: string;
+  email: string;
 
   @Prop({ required: true })
   firstName: string;
@@ -14,8 +14,8 @@ export class Chat {
   @Prop({ required: true })
   lastName: string;
 
-  @Prop({ required: true })
-  city: string;
+  //   @Prop({ required: true, enum: ['user', 'admin'], default: 'user' })
+  //   role: string;
 }
 
-export const ChatSchema = SchemaFactory.createForClass(Chat);
+export const UserSchema = SchemaFactory.createForClass(User);

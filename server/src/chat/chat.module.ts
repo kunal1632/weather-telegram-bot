@@ -10,6 +10,6 @@ import { Chat, ChatSchema } from './schemas/chat.schema';
   ],
   providers: [ChatService],
   controllers: [ChatController],
-  exports: [ChatService],
+  exports: [ChatService, MongooseModule],
 })
 export class ChatModule {}

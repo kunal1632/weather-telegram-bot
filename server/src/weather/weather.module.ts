@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { WeatherService } from './weather.service';
-import { HttpModule } from '@nestjs/axios';
+import { SettingsModule } from 'src/settings/settings.module';
 // import { TelegramModule } from 'src/telegram/telegram.module';
 
 @Module({
-  imports: [HttpModule],
+  imports: [SettingsModule],
   providers: [WeatherService],
 })
 export class WeatherModule {}
