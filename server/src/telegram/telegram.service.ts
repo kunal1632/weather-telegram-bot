@@ -1,22 +1,31 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as TelegramBot from 'node-telegram-bot-api';
 import { WeatherService } from 'src/weather/weather.service';
 
 import { ChatService } from 'src/chat/chat.service';
+import * as cron from 'node-cron';
 
 @Injectable()
-export class TelegramService implements OnModuleInit {
+export class TelegramService {
   private bot: TelegramBot;
+  private bot_token = process.env.TELEGRAM_BOT_TOKEN;
 
   constructor(
     private readonly weatherService: WeatherService,
     private readonly chatService: ChatService,
-  ) {}
+  ) {
+    this.bot = new TelegramBot(this.bot_token, { polling: true });
 
-  onModuleInit() {
-    const token = process.env.TELEGRAM_BOT_TOKEN;
-    this.bot = new TelegramBot(token, { polling: true });
+    this.botCommands();
 
+    cron.schedule('0 7 * * *', () => {
+      console.log('sending daily Weather update ');
+
+      this.sendWeatherToAll();
+    });
+  }
+
+  private botCommands() {
     // Listen for the /start command
     this.bot.onText(/\/start/, (msg) => {
       const chatId = msg.chat.id;
@@ -29,8 +38,8 @@ export class TelegramService implements OnModuleInit {
     // Listen for the /subscribe command
     this.bot.onText(/\/subscribe/, async (msg) => {
       const chatId = msg.chat.id;
-      const firstName = msg.contact.first_name;
-      const lastName = msg.contact.last_name || '';
+      const firstName = msg.chat.first_name || '';
+      const lastName = msg.chat.last_name || '';
       try {
         const isUserExist = await this.chatService.checkUser(chatId.toString());
         if (isUserExist) {
@@ -97,7 +106,7 @@ export class TelegramService implements OnModuleInit {
           const weatherData = await this.weatherService.getWeatherForCity(
             chat.city,
           );
-          const weatherMessage = `Weather in ${chat.city}: ${weatherData.description}, temperature: ${weatherData.temp}C`;
+          const weatherMessage = `Weather in ${chat.city}: ${weatherData.description}\nTemperature: ${weatherData.temp}°C\nFeels Like: ${weatherData.feelsLike}°C\nHumidty: ${weatherData.humidity}%\nWind speed: ${weatherData.windSpeed}kph.`;
           this.bot.sendMessage(chatId, weatherMessage);
         } else {
           this.bot.sendMessage(
@@ -106,6 +115,7 @@ export class TelegramService implements OnModuleInit {
           );
         }
       } catch (error) {
+        console.log(error.message);
         this.bot.sendMessage(chatId, 'Failed to fetch weather data.');
       }
     });
@@ -129,8 +139,21 @@ export class TelegramService implements OnModuleInit {
       const chatId = msg.chat.id;
       this.bot.sendMessage(
         chatId,
-        'Here are the available commands:\n/subscribe - Subscribe for daily weather updates\n/setcity <cityName> - Set city to get its weather updates\n/weather - Get weather information for the selected city\n/help - Show this help message\n/unsubscribe - Stop reciving daily weather updates',
+        'Here are the available commands:\n/subscribe - Subscribe for daily weather updates\n/setcity <cityName> - Set city to get its weather updates\n/weather - Get weather information for the selected city\n/help - Show this help message\n/unsubscribe - Stop reciving daily weather update\nDaily weather updates will be send very morning at 7:00 Am',
       );
     });
+  }
+
+  private async sendWeatherToAll() {
+    try {
+      const allUsers = await this.chatService.findAll();
+      allUsers.forEach(async (user) => {
+        const weather = await this.weatherService.getWeatherForCity(user.city);
+        const message = `Good morning ${user.firstName}! Today the weather in ${user.city} is: ${weather.description}\nTemperature: ${weather.temp}°C\nFeels Like: ${weather.feelsLike}°C\nHumidty: ${weather.humidity}%\nWind speed: ${weather.windSpeed}kph.`;
+        this.bot.sendMessage(user.chatId, message);
+      });
+    } catch (error) {
+      console.log('Cannot send daily weather update');
+    }
   }
 }

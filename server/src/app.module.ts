@@ -3,10 +3,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { ScheduleModule } from '@nestjs/schedule';
-import { AdminModule } from './admin/admin.module';
-import { WeatherModule } from './weather/weather.module';
-
-import { TelegramBotService } from './telegram/telegram-bot-service';
+// import { WeatherModule } from './weather/weather.module';
+import { WeatherService } from './weather/weather.service';
+import { ChatModule } from './chat/chat.module';
+import { TelegramService } from './telegram/telegram.service';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -16,9 +17,10 @@ import { TelegramBotService } from './telegram/telegram-bot-service';
     MongooseModule.forRoot(process.env.MONGODB_URI),
     HttpModule,
     ScheduleModule.forRoot(),
-    AdminModule,
-    WeatherModule,
+    ChatModule,
+    SettingsModule,
+    // WeatherModule,
   ],
-  providers: [TelegramBotService],
+  providers: [TelegramService, WeatherService],
 })
 export class AppModule {}

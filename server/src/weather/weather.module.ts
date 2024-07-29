@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
 import { WeatherService } from './weather.service';
-import { ChatModule } from '../chat/chat.module';
 import { HttpModule } from '@nestjs/axios';
+// import { TelegramModule } from 'src/telegram/telegram.module';
 
 @Module({
-  imports: [ScheduleModule.forRoot(), HttpModule, ChatModule],
+  imports: [HttpModule],
   providers: [WeatherService],
 })
 export class WeatherModule {}
