@@ -3,7 +3,8 @@ import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const googleLogin = () => {
-    window.location.href = "http://localhost:4000/auth/google";
+    window.location.href =
+      "http://ec2-65-0-85-127.ap-south-1.compute.amazonaws.com:4000/auth/google";
   };
 
   return (
