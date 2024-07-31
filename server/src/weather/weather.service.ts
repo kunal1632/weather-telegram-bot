@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
-// import { map } from 'rxjs/operators';
 import { SettingsService } from 'src/settings/settings.service';
 
 @Injectable()
@@ -11,7 +9,7 @@ export class WeatherService {
     const apiKey =
       (await this.settingService.getActiveApiKey()) ||
       process.env.OPENWEATHERMAP_API_KEY;
-    console.log(apiKey);
+    console.log('Api key used: ', apiKey);
     if (apiKey) {
       const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
 

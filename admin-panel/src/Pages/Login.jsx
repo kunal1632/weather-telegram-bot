@@ -1,39 +1,24 @@
 import React from "react";
-import { GoogleLogin } from "@react-oauth/google";
-// import axios from "axios";
-// import { useHistory } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
-  // const history = useHistory();
+  const googleLogin = () => {
+    window.location.href = "http://localhost:4000/auth/google";
+  };
 
-  // const handleGoogleLoginSuccess = async (response) => {
-  //   try {
-  //     const res = await axios.post("http://localhost:3000/auth/google", {
-  //       token: response.tokenId,
-  //     });
-  //     localStorage.setItem("token", res.data.access_token);
-  //     // history.push("/dashboard");
-  //   } catch (error) {
-  //     console.error("Login failed:", error);
-  //   }
-  // };
-
-  // const handleGoogleLoginFailure = (response) => {
-  //   console.error("Login failed:", response);
-  // };
-  console.log(process.env.GOOGLE_CLIENT_ID);
   return (
-    <div>
-      <h1>Admin Login</h1>
-      <GoogleLogin
-        onSuccess={(credentialResponse) => {
-          console.log(credentialResponse);
-        }}
-        onError={() => {
-          console.log("Login Failed");
-        }}
-      />
-      ;
+    <div className="w-full flex items-center mt-[10%] flex-col gap-5">
+      <h1 className="text-white text-5xl font-semibold">Admin Login</h1>
+      <p className="text-slate-200 text-xl">
+        Login with your Google account to access admin controls for the Telegram
+        bot.
+      </p>
+      <button
+        onClick={googleLogin}
+        className="text-white flex gap-2 items-center mt-5 text-xl border-[1px] border-slate-500 px-7 py-3 rounded-xl hover:scale-95 hover:bg-slate-950 bg-slate-900 transition-all duration-200"
+      >
+        Login with Google <FcGoogle size={25} />
+      </button>
     </div>
   );
 };

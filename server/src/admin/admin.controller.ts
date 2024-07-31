@@ -1,9 +1,6 @@
-// src/admin/admin.controller.ts
-
-import { Controller, Get, Post, Body, UseGuards, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateSettingsDto } from './dto/update-settings.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('admin')
 @UseGuards(JwtAuthGuard)
@@ -21,13 +18,18 @@ export class AdminController {
   }
 
   @Post('add-api-key')
-  async addApiKey(@Body() updateSettingsDto: UpdateSettingsDto) {
-    return this.adminService.addApiKey(updateSettingsDto.apiKey);
+  async addApiKey(@Body('apiKey') apiKey: string) {
+    return this.adminService.addApiKey(apiKey);
   }
 
-  @Post('set-active-api-key/:id')
-  async setActiveApiKey(@Param('id') id: string) {
-    return this.adminService.setActiveApiKey(id);
+  @Post('remove-api-key')
+  async rempveApiKey(@Body('apiKeyId') apiKeyId: string) {
+    return this.adminService.removeApiKey(apiKeyId);
+  }
+
+  @Post('set-active-api-key')
+  async setActiveApiKey(@Body('apiKeyId') apiKeyId: string) {
+    return this.adminService.setActiveApiKey(apiKeyId);
   }
 
   @Get('api-keys')

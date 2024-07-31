@@ -38,10 +38,10 @@ export class TelegramService {
     // Listen for the /subscribe command
     this.bot.onText(/\/subscribe/, async (msg) => {
       const chatId = msg.chat.id;
-      const firstName = msg.chat.first_name || '';
-      const lastName = msg.chat.last_name || '';
+      const firstName = msg.chat.first_name || 'N/A';
+      const lastName = msg.chat.last_name || 'N/A';
       try {
-        const isUserExist = await this.chatService.checkUser(chatId.toString());
+        const isUserExist = await this.chatService.getUser(chatId.toString());
         if (isUserExist) {
           this.bot.sendMessage(
             chatId,
@@ -59,6 +59,7 @@ export class TelegramService {
           );
         }
       } catch (error) {
+        console.log(error);
         this.bot.sendMessage(chatId, 'Failed to subscribe for updates.');
       }
     });
@@ -68,7 +69,7 @@ export class TelegramService {
       const chatId = msg.chat.id;
       const city = match[1]; // Extract the city from the command
       try {
-        const isUser = await this.chatService.checkUser(chatId.toString());
+        const isUser = await this.chatService.getUser(chatId.toString());
         if (isUser) {
           const res = await this.chatService.saveCity(
             chatId.toString(),
@@ -100,8 +101,9 @@ export class TelegramService {
     this.bot.onText(/\/weather/, async (msg) => {
       const chatId = msg.chat.id;
       try {
-        const user = await this.chatService.findAll();
-        const chat = user.find((c) => c.chatId === chatId.toString());
+        const chat = await this.chatService.getUser(chatId.toString());
+
+        console.log('chat', chat);
         if (chat && chat.city) {
           const weatherData = await this.weatherService.getWeatherForCity(
             chat.city,

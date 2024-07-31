@@ -22,9 +22,14 @@ export class AdminService {
     return this.chatModel.deleteOne({ chatId }).exec();
   }
 
-  async addApiKey(apiKey: string): Promise<void> {
+  async addApiKey(apiKey: string): Promise<ApiKey> {
     const newApiKey = new this.apiKeyModel({ key: apiKey, isActive: false });
     await newApiKey.save();
+    return newApiKey;
+  }
+
+  async removeApiKey(apiKeyId: string) {
+    return this.apiKeyModel.deleteOne({ _id: apiKeyId }).exec();
   }
 
   async setActiveApiKey(id: string): Promise<void> {

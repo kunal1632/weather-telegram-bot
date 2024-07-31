@@ -11,10 +11,7 @@ export class AuthService {
 
   async validateUser(email: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
-    if (user) {
-      return user;
-    }
-    return null;
+    return user ? user : null;
   }
 
   async createUser(user: any): Promise<any> {
@@ -22,9 +19,10 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { email: user.email, sub: user._id, role: user.role };
+    const payload = { email: user.email, sub: user._id };
+    const accessToken = this.jwtService.sign(payload);
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: accessToken,
     };
   }
 }

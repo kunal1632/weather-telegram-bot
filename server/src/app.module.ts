@@ -11,6 +11,9 @@ import { SettingsModule } from './settings/settings.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminService } from './admin/admin.service';
+import { AuthController } from './auth/auth.controller';
+import { AdminController } from './admin/admin.controller';
+// import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
@@ -26,5 +29,6 @@ import { AdminService } from './admin/admin.service';
     AuthModule,
   ],
   providers: [TelegramService, WeatherService, AdminService],
+  controllers: [AuthController, AdminController],
 })
 export class AppModule {}

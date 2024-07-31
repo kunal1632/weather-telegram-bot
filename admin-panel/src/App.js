@@ -4,13 +4,14 @@ import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import OpenRoute from "./Components/auth/OpenRoute";
 import PrivateRoute from "./Components/auth/PrivateRoute";
+import HandleAuth from "./Components/auth/HandleAuth"; // Import the HandleAuth component
 
 const App = () => {
   return (
-    <div>
+    <div className="w-screen min-h-screen bg-slate-950 flex flex-col font-inter">
       <Routes>
         <Route
-          path="/login"
+          path="/"
           element={
             <OpenRoute>
               <Login />
@@ -19,11 +20,20 @@ const App = () => {
         />
 
         <Route
-          path="/"
+          path="/dashboard"
           element={
             <PrivateRoute>
               <Dashboard />
             </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/auth/handle"
+          element={
+            <OpenRoute>
+              <HandleAuth />
+            </OpenRoute>
           }
         />
       </Routes>

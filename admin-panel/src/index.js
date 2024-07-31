@@ -13,9 +13,8 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
-const clientId = process.env.GOOGLE_CLIENT_ID;
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const root = ReactDOM.createRoot(document.getElementById("root"));
-console.log(clientId);
 
 root.render(
   <React.StrictMode>

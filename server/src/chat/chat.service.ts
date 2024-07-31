@@ -7,12 +7,12 @@ import { Chat } from './schemas/chat.schema';
 export class ChatService {
   constructor(@InjectModel(Chat.name) private chatModel: Model<Chat>) {}
 
-  async checkUser(chatId: string) {
+  async getUser(chatId: string) {
     const exisitngChat = await this.chatModel.findOne({ chatId }).exec();
     if (exisitngChat) {
-      return true;
+      return exisitngChat;
     } else {
-      return false;
+      return null;
     }
   }
 
